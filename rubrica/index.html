@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="shortcut icon" type="img/x-icon" href="img/contact_.png" />
+  <title>Rubrica</title>
+  <link rel="stylesheet" type="text/css" href="css\bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&family=Shizuru&family=Ubuntu+Mono&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css\style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+</head>
+
+<body>
+  <!-- BARRA DI RICERCA -->
+  <nav class="navbar navbar-light bg-info justify-content-between">
+    <a class="navbar-brand" id="font" href="#"><i class="bi bi-journals" ></i> Rubrica</a>
+    <form class="form-inline">
+      <button type="button" class="btn btn-dark mx-2" id="add">
+          <i class="bi bi-person-plus"></i>
+      </button>
+      <input class="form-control mr-sm-2" type="search" placeholder="Cerca contatto" aria-label="Search">
+      <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="bi bi-search"></i> Cerca</button>
+    </form>
+  </nav>
+<!--FINE BARRA DI RICERCA-->
+<div class="infoContatto">
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Informazioni</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <i class="bi bi-person-square"></i>
+      <span id="nome"></span>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+<!--INIZIO ELENCO-->
+  <div class="container-fluid">
+    <div class="col-sm-6 table-responsive bg-light mt-4">
+    <table class="table table-hover table-sm"> <!--sm si adatta a un dispositivo small di 520px nel responsive-->
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Nome</th>
+      <th scope="col">Cognome</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+  </div><!--FINE DIV CONTAINER FLUID-->
+  <!--FINE ELENCO-->
+
+  <script src="js/jquery-3.1.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script>
+    $.ajax({
+      url: "http://localhost/rubrica/api/api.php?action=getUtenti",
+      dataType: "JSON",
+      success: function(result){
+        var tr=[];
+    				for (var i = 0; i < result.length; i++) {
+    					tr.push('<tr id="'+result[i].id+'">');
+    					tr.push('<th scope="row"><i class="bi bi-person-circle"></i></th>');
+    					tr.push('<td class="align-middle">' + result[i].nome + '</td>');
+              tr.push('<td class="align-middle">' + result[i].cognome + '</td>');
+              tr.push('<td><button type="button" class="modale btn btn-outline-info btn-sm my-2 mx-1 my-sm-0 ml-5" data-toggle="modal" data-target="#exampleModal"><i class="bi bi-file-earmark-person-fill"></i></button><button class="modifica btn btn-outline-success btn-sm my-2 my-sm-0 mx-2" type="submit">Modifica  <i class="bi bi-pencil-fill"></i></button><button class="delete btn btn-outline-danger btn-sm my-2 my-sm-0" type="submit" id=' + result[i].id + '>Rimuovi   <i class="bi bi-eraser-fill"></i></button></td>');
+
+              tr.push('</tr>');
+    				}
+    				$('tbody').append($(tr.join('')));
+            $('.modale').on('click', function(){
+              $('.infoContatto').show();
+              var idContatto = $(this).parent().parent().attr('id');
+              $.ajax({
+                  url: "http://localhost/rubrica/api/api.php?action=getUtente&id="+idContatto,
+                  dataType: "JSON",
+                  success: function(result){
+                      $('#nome').text(result[0].nome+", "+result[0].cognome+", "+result[0].telefono);
+                    }
+                  });
+              });
+          $('.delete').on('click', function(){
+              var idContatto = $(this).parent().parent().attr('id');
+              $.ajax({
+                url: "http://localhost/rubrica/api/api.php?action=deleteUtente&id="+idContatto,
+                dataType: "JSON",
+                success: function(result){
+
+                }
+              });
+              alert("Contatto Eliminato");
+              history.go();
+            });
+          $()
+        }
+    });
+    </script>
+</body>
+
+</html>

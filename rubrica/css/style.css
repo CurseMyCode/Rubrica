@@ -1,0 +1,28 @@
+body{
+  background-color: #e0ffff;
+  width: 100%;
+}
+.container-fluid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+th{
+/*  width: 0.5%;*/
+}
+.input-form{
+  margin: 0 auto;
+  display: block;
+  width: 300px;
+  box-shadow: 3px -1px 20px 1px #17a2b8;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 100px;
+  position: grid;
+  align-self: center;
+}
+#font{
+  font-family:Ubuntu Mono, sans-serif;
+  color: white;
+}

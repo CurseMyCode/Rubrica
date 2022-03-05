@@ -1,0 +1,6 @@
+CREATE TABLE utente(
+  id int(2) PRIMARY KEY NOT NULL auto_increment,
+  nome varchar(25),
+  cognome varchar(25),
+  telefono varchar(10)
+);
