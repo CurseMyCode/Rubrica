@@ -85,26 +85,20 @@
               tr.push('</tr>');
     				}
     				$('tbody').append($(tr.join('')));
-            $('.modale').on('click', function(){
-              $('.infoContatto').show();
-              var idContatto = $(this).parent().parent().attr('id');
-              $.ajax({
-                  url: "http://localhost/rubrica/api/api.php?action=getUtente&id="+idContatto,
-                  dataType: "JSON",
-                  success: function(result){
-                      $('#nome').text(result[0].nome+", "+result[0].cognome+", "+result[0].telefono);
-                    }
-                  });
+            $('.modale').on('click', async function(){
+                $('.infoContatto').show();
+                var idContatto = $(this).parent().parent().attr('id');
+                let result = await $.ajax({url: "http://localhost/rubrica/api/api.php?action=getUtente&id="+idContatto, dataType: "JSON"});
+                $('#nome').text(result[0].nome+", "+result[0].cognome+", "+result[0].telefono);
               });
-          $('.delete').on('click', function(){
+          $('.delete').on('click', async function(){
               var idContatto = $(this).parent().parent().attr('id');
-              $.ajax({
-                url: "http://localhost/rubrica/api/api.php?action=deleteUtente&id="+idContatto,
-                dataType: "JSON",
-                success: function(result){
+              try{
+                let res = await $.ajax({url: "http://localhost/rubrica/api/api.php?action=deleteUtente&id="+idContatto,dataType: "JSON"});
+              }catch(e){
 
-                }
-              });
+              }
+              
               alert("Contatto Eliminato");
               history.go();
             });
